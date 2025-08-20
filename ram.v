@@ -2,13 +2,13 @@ module ram (
     input wire clk,              // clock
     input wire ce,               // chip enable (active high)
     input wire we,               // write enable (active high)
-    input wire [7:0] addr,       // 8-bit address (256 locations)
+    input wire [15:0] addr,       // 8-bit address (256 locations)
     input wire [7:0] data_in,    // 8-bit input data
     output reg [7:0] data_out    // 8-bit output data
 );
 
-    // Declare 256 x 8-bit memory
-    reg [7:0] mem [0:255];
+    // Declare 65536 x 8-bit memory
+    reg [7:0] mem [0:65535];
 
     // Load memory content from external file at simulation start
     initial begin
@@ -20,7 +20,7 @@ module ram (
     always @(posedge clk) begin
         if (ce && we) begin
             mem[addr] <= data_in;
-            $display("Wrote %h to RAM[%0d] at time %0t", data_in, addr, $time);
+            //$display("Wrote %h to RAM[%0d] at time %0t", data_in, addr, $time);
         end
     end
 

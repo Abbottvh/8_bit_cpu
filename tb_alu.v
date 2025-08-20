@@ -7,7 +7,7 @@ module tb_eight_bit_adder_subtractor;
     reg enable;
     wire [7:0] s;
 
-    // Instantiate your DUT (Device Under Test)
+    
     eight_bit_adder_subtractor dut (
         .a(a),
         .b(b),
@@ -33,7 +33,7 @@ module tb_eight_bit_adder_subtractor;
         #10;
         $display("Test 2: %d + %d = %d", a, b, s);
 
-        // Test Case 3: 200 + 100 = 44 (with overflow, if you want to check overflow)
+        // Test Case 3: 200 + 100 = 44 - overflow
         a = 8'd200;
         b = 8'd100;
         #10;

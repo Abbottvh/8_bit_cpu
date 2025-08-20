@@ -9,13 +9,13 @@ module tb_program_counter;
     // Program counter signals
     reg pc_count = 0;
     reg pc_load = 0;
-    reg [7:0] jump_address = 8'h00;
-    wire [7:0] pc_address;
+    reg [15:0] jump_address = 16'h00;
+    wire [15:0] pc_address;
 
     // Ring counter signals
     reg rc_enable = 0;
-    reg extended_fetch = 0;
-    wire [9:0] t_state;
+    reg [1:0] mode = 2'b00;
+    wire [14:0] t_state;
 
     // Instantiate Program Counter
     program_counter uut_pc (
@@ -32,7 +32,7 @@ module tb_program_counter;
         .clk(clk),
         .clear(clear),
         .enable(rc_enable),
-        .extended_fetch(extended_fetch),
+        .mode(mode),
         .t_state(t_state)
     );
 
@@ -51,7 +51,7 @@ module tb_program_counter;
 
         // Load PC with jump address
         pc_load = 1;
-        jump_address = 8'hA5;
+        jump_address = 16'hA5;
         #10;
         pc_load = 0;
 
@@ -60,7 +60,7 @@ module tb_program_counter;
         #30;
         pc_count = 0;
         pc_load = 1;
-        jump_address = 8'hb5;
+        jump_address = 16'hb5;
         #10
         pc_load = 0;
         pc_count = 1;
@@ -75,7 +75,7 @@ module tb_program_counter;
 
         // Test ring counter - short fetch (6 T-states)
         rc_enable = 1;
-        extended_fetch = 0;
+        mode = 2'b00;
         #70;  // Allow enough time to cycle through T0-T5
 
         // Reset ring counter
@@ -84,8 +84,17 @@ module tb_program_counter;
         clear = 0;
 
         // Test ring counter - extended fetch (10 T-states)
-        extended_fetch = 1;
+        mode = 2'b01;
         #100;
+
+        // Reset ring counter
+        clear = 1;
+        #10;
+        clear = 0;
+
+        // Test ring counter - extended fetch (10 T-states)
+        mode = 2'b10;
+        #160;
 
         // Done
         $display("Testbench Complete.");

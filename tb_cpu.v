@@ -13,7 +13,7 @@ module cpu_tb;
     cpu uut (
         .clk(clk),
         .clear(clear),
-        .data_in(8'bz),      // data_in unused or tied low since RAM has instructions loaded
+        .data_in(16'bz),      // data_in unused or tied low since RAM has instructions loaded
         .data_out(data_out),
         .enable_ring_counter(enable_ring_counter)
     );
@@ -35,15 +35,15 @@ module cpu_tb;
             $finish;  // Ends the simulation
         end
         // Run for a fixed time, then finish
-        #1500;
+        #30000;
 
         $finish;
     end
 
     // Monitor signals
     initial begin
-        //$monitor("Time: %0t | accumulator: %b | program counter: %b | output: %h | instruction: %h", $time, uut.datapath.accum_output, uut.datapath.address_location, uut.data_out, uut.datapath.controller_sequencer_input);
-        $monitor("Time: %0t | mdr: %b | program counter: %b | mar: %h | instruction: %h", $time, uut.datapath.mdr_reg_out, uut.datapath.address_location, uut.datapath.mar_output, uut.datapath.controller_sequencer_input);
+        //$monitor("Time: %0t | Accumulator: %h | B Register: %h | Output: %d", $time, uut.datapath.accum_output, uut.datapath.b_reg_out, uut.data_out);
+        $monitor("Time: %0t | Output: %d", $time, uut.data_out);
         //$monitor("Time: %0t | program counter = %h", $time, uut.datapath.bus_internal);
         //$monitor("Time: %0t | clk = %b | clear = %b | enable = %b | extended_fetch = %b | t_state = %b", 
         //  $time, uut.ring_counter.clk, uut.ring_counter.clear, uut.ring_counter.enable, uut.ring_counter.extended_fetch, uut.ring_counter.t_state);

@@ -1,5 +1,5 @@
 module cpu (
-    input wire [7:0] data_in,
+    input wire [15:0] data_in,
     input wire clk,
     input wire clear,
     output wire [7:0] data_out,
@@ -19,10 +19,12 @@ module cpu (
          enable_alu, 
          load_mdr_reg,
          enable_mdr_reg,
+         select_mdr_output,
          load_b_reg,
          enable_b_reg,
          load_c_reg,
          enable_c_reg,
+         enable_temp,
          load_temp_reg,
          load_output_reg, 
          load_inst_reg,
@@ -31,21 +33,20 @@ module cpu (
          load_pc,
          zero_flag,
          carry_flag,
-         extended_fetch,
          internal_enable_ring_counter;
          //enable_ring_counter;
   
+    wire [1:0] mode;
     wire [7:0] controller_sequencer_input;
-    wire [9:0] t_state;
+    wire [14:0] t_state;
 
     assign enable_ring_counter = 1'b1;
-    assign extended_fetch = 1'b0;
 
     ring_counter ring_counter(
         .clk(clk),
         .clear(clear),
         .enable(enable_ring_counter), 
-        .extended_fetch(extended_fetch),
+        .mode(mode),
         .t_state(t_state)
     );
 
@@ -64,12 +65,14 @@ module cpu (
         .ce_ram(ce_ram), 
         .we_ram(we_ram), 
         .flip_flop(flip_flop),
+        .select_mdr_output(select_mdr_output),
         .sub_mode(sub_mode), 
         .enable_alu(enable_alu), 
         .load_b_reg(load_b_reg),
         .enable_b_reg(enable_b_reg),
         .load_c_reg(load_c_reg),
         .enable_c_reg(enable_c_reg),
+        .enable_temp(enable_temp),
         .load_temp_reg(load_temp_reg),
         .load_mdr_reg(load_mdr_reg),
         .enable_mdr_reg(enable_mdr_reg),
@@ -78,7 +81,7 @@ module cpu (
         .enable_inst_reg(enable_inst_reg), 
         .clear_inst_reg(clear_inst_reg),
         .load_pc(load_pc),
-        .extended_fetch(extended_fetch),
+        .mode(mode),
         .enable_ring_counter(enable_ring_counter)
     );
 
@@ -94,6 +97,7 @@ module cpu (
         .ce_ram(ce_ram), 
         .we_ram(we_ram), 
         .flip_flop(flip_flop),
+        .select_mdr_output(select_mdr_output),
         .sub_mode(sub_mode), 
         .enable_alu(enable_alu), 
         .load_mdr_reg(load_mdr_reg),
@@ -103,6 +107,7 @@ module cpu (
         .load_c_reg(load_c_reg),
         .enable_c_reg(enable_c_reg),
         .load_temp_reg(load_temp_reg),
+        .enable_temp(enable_temp),
         .load_output_reg(load_output_reg), 
         .load_inst_reg(load_inst_reg),
         .enable_inst_reg(enable_inst_reg), 
