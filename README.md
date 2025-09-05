@@ -32,8 +32,8 @@
 
 🕹️ How to Use
 
-    1.) Write Your Program in the program.asm file in Assembly. On running, the 
-        .asm file will automatically be assembled into binary and loaded into the moemory.
+    1.) Write Your Program in the program.asm file in Assembly. On running the test file, the 
+        .asm file will automatically be assembled into binary and loaded into the memory.
         
     2.) Edit the tb_cpu.v file so that the terminal outputs the correct values for your desired purpose.
 
